@@ -49,8 +49,8 @@ let spacePlanets = [];
 
 const gravity = 9.81;
 const maxAltitude = 999;
-const burnTime = 10;
-const dragCoefficient = 0.08;
+const burnTime = 14;
+const dragCoefficient = 0.05;
 const referenceArea = 0.35;
 const airDensityAtSeaLevel = 1.225;
 
@@ -217,8 +217,8 @@ function drawScene() {
         ctx.fillStyle = "white";
         ctx.beginPath();
         ctx.arc(
-            star.x - cameraX * 0.08,
-            star.y - cameraY * 0.08,
+            star.x,
+            star.y,
             star.size,
             0,
             Math.PI * 2
@@ -234,8 +234,8 @@ function drawScene() {
         ctx.fillStyle = planet.color;
         ctx.beginPath();
         ctx.arc(
-            planet.x - cameraX * 0.2,
-            planet.y - cameraY * 0.2,
+            planet.x,
+            planet.y,
             planet.radius,
             0,
             Math.PI * 2
@@ -246,8 +246,8 @@ function drawScene() {
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.ellipse(
-            planet.x - cameraX * 0.2,
-            planet.y - cameraY * 0.2,
+            planet.x,
+            planet.y,
             planet.radius * 1.45,
             planet.radius * 0.35,
             -0.2,
@@ -303,8 +303,9 @@ function drawScene() {
 }
 
 function updateStarfield(dt) {
-    const starMotionX = horizontalVelocity * dt * 0.12;
-    const starMotionY = verticalVelocity * dt * 0.08;
+    // O cenário se move no sentido contrário ao foguete.
+    const starMotionX = -horizontalVelocity * dt * 0.25;
+    const starMotionY = verticalVelocity * dt * 0.18;
 
     simulationStars.forEach(star => {
         star.x += starMotionX;
@@ -314,6 +315,27 @@ function updateStarfield(dt) {
         if (star.x > canvas.width + 10) star.x = -10;
         if (star.y < -10) star.y = canvas.height * 0.78;
         if (star.y > canvas.height * 0.78) star.y = -10;
+    });
+
+    spacePlanets.forEach(planet => {
+        planet.x -= horizontalVelocity * dt * 0.08;
+        planet.y += verticalVelocity * dt * 0.05;
+
+        if (planet.x < -planet.radius * 2) {
+            planet.x = canvas.width + planet.radius * 2;
+        }
+
+        if (planet.x > canvas.width + planet.radius * 2) {
+            planet.x = -planet.radius * 2;
+        }
+
+        if (planet.y < -planet.radius * 2) {
+            planet.y = canvas.height + planet.radius * 2;
+        }
+
+        if (planet.y > canvas.height + planet.radius * 2) {
+            planet.y = -planet.radius * 2;
+        }
     });
 }
 
@@ -529,6 +551,7 @@ function updateSimulation(dt) {
 
 
     if (parachuteDeployed) {
+        motorForce = 0;
         verticalVelocity = Math.max(verticalVelocity - gravity * dt, -7);
         horizontalVelocity *= Math.max(0, 1 - 2.5 * dt);
         altitude = Math.max(0, altitude + verticalVelocity * dt);
