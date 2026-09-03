@@ -57,40 +57,25 @@ header {
 }
 
 .logo {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 10px;
-    color: #ffffff;
-    font-size: 22px;
-    font-weight: bold;
+    justify-content: center;
     text-decoration: none;
+    height: 60px;
 }
 
 .logo img {
+    width: 190px;
+    height: auto;
     display: block;
-    width: 150px;
-    height: 48px;
     object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6));
+    transition: 0.3s ease;
 }
 
-.logo-mark {
-    display: grid;
-    width: 40px;
-    height: 40px;
-    place-items: center;
-    border: 1px solid rgba(125, 211, 252, .6);
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 25%, #38bdf8, #1d4ed8 70%);
-    box-shadow: 0 0 22px rgba(56, 189, 248, .35);
-    font-size: 22px;
-}
-
-.logo-name {
-    letter-spacing: .3px;
-}
-
-.logo span {
-    color: #38bdf8;
+.logo:hover img {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.9));
 }
 
 .navbar ul {
@@ -697,51 +682,4 @@ footer p {
         grid-template-columns: repeat(2, 1fr);
     }
 
-}
-/* ==========================================
-   LOGO ROCKETLAB
-   ========================================== */
-
-.logo {
-    display: flex;
-    align-items: center;
-
-    text-decoration: none;
-
-    height: 55px;
-
-    transition: .3s;
-}
-
-.logo img {
-    width: 180px;
-    height: auto;
-
-    display: block;
-
-    object-fit: contain;
-
-    filter:
-        drop-shadow(
-            0 0 12px
-            rgba(56, 189, 248, .45)
-        );
-
-    transition: .3s;
-}
-
-.logo:hover img {
-    transform: scale(1.05);
-
-
-@media (max-width: 600px) {
-    .logo img {
-        width: 135px;
-    }
-}
-    filter:
-        drop-shadow(
-            0 0 22px
-            rgba(56, 189, 248, .8)
-        );
 }
