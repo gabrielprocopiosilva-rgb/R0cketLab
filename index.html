@@ -11,34 +11,26 @@
 
 <body>
 
-    <!-- Fundo de estrelas -->
     <div class="stars"></div>
 
-    <!-- MENU -->
     <header>
-        <nav class="navbar">
+    <nav class="navbar">
+        <div class="logo">🚀 Rocket<span>Lab</span></div>
 
-            <div class="logo">
-                🚀 <span>Rocket</span>Lab
-            </div>
+        <ul>
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#estudos">Estudos</a></li>
+            <li><a href="#simulador">Simulador</a></li>
+            <li><a href="#fisica">Física</a></li>
+        </ul>
+    </nav>
+</header>
 
-            <ul>
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#fisica">Física</a></li>
-                <li><a href="#programacao">Programação</a></li>
-                <li><a href="#robotica">Robótica</a></li>
-                <li><a href="#simulador">Simulador</a></li>
-            </ul>
-
-        </nav>
-    </header>
-
+<main>
 
     <!-- HERO -->
     <section id="inicio" class="hero">
-
         <div class="hero-text">
-
             <p class="tag">🚀 LABORATÓRIO ESPACIAL</p>
 
             <h1>
@@ -47,115 +39,214 @@
             </h1>
 
             <p>
-                Descubra como a Física, a Programação e a Robótica
-                trabalham juntas para transformar uma ideia em um
-                foguete capaz de conquistar o céu.
+                Descubra como Física, Programação, Robótica, Matemática
+                e Engenharia trabalham juntas para levar foguetes além
+                da atmosfera terrestre.
             </p>
 
             <div class="buttons">
-
                 <a href="#simulador" class="btn primary">
-                    🚀 Iniciar simulação
+                    🚀 Lançar foguete
                 </a>
 
-                <a href="#fisica" class="btn secondary">
-                    Explorar conteúdo
+                <a href="#estudos" class="btn secondary">
+                    📚 Explorar estudos
                 </a>
-
             </div>
-
         </div>
 
         <div class="rocket-container">
-
             <div class="glow"></div>
-
-            <div class="rocket">
-                🚀
-            </div>
-
-            <div class="smoke"></div>
-
+            <div class="rocket">🚀</div>
         </div>
-
     </section>
 
 
-    <!-- SOBRE -->
+    <!-- INTRODUÇÃO -->
     <section class="intro">
-
         <div>
-            <p class="tag">TECNOLOGIA + CIÊNCIA</p>
+            <p class="tag">SOBRE O PROJETO</p>
 
             <h2>
-                Como um foguete
-                consegue voar?
+                Ciência que<br>
+                ganha vida.
             </h2>
         </div>
 
         <p>
-            O lançamento de um foguete envolve diversos conceitos
-            científicos e tecnológicos. A força dos motores gera
-            empuxo, enquanto as leis de Newton ajudam a explicar
-            o movimento.
-        </p>
+            O RocketLab é um projeto educacional criado para demonstrar
+            como diferentes áreas da ciência e tecnologia podem trabalhar
+            juntas.
 
+            <br><br>
+
+            Aqui você pode estudar conceitos, visualizar fórmulas e testar
+            um lançamento de foguete através de uma simulação interativa.
+        </p>
     </section>
 
 
-    <!-- CARDS -->
-    <section class="subjects">
+    <!-- STUDY CARDS -->
+    <section id="estudos" class="study-section">
 
-        <div id="fisica" class="subject-card">
+        <div class="section-title">
+            <p class="tag">📚 CONHECIMENTO</p>
 
-            <div class="icon">⚛️</div>
-
-            <h3>Física</h3>
+            <h2>Áreas de estudo</h2>
 
             <p>
-                Estude força, aceleração, velocidade, gravidade,
-                energia e as leis de Newton aplicadas aos foguetes.
+                Clique em uma área para explorar seus principais conceitos.
             </p>
-
-            <div class="formula">
-                F = m · a
-            </div>
-
         </div>
 
 
-        <div id="programacao" class="subject-card">
+        <div class="subjects">
 
-            <div class="icon">💻</div>
+            <button id="fisicaButton" class="subject-card">
+                <div class="icon">⚛️</div>
+                <h3>Física</h3>
 
-            <h3>Programação</h3>
+                <p>
+                    Entenda as forças, movimentos e leis que governam
+                    o lançamento de um foguete.
+                </p>
 
-            <p>
-                Utilize algoritmos e JavaScript para criar
-                simulações e controlar sistemas.
-            </p>
+                <div class="formula">F = m × a</div>
 
-            <div class="formula">
-                if (launch) 🚀
-            </div>
-
-        </div>
+                <span class="card-link">
+                    Estudar →
+                </span>
+            </button>
 
 
-        <div id="robotica" class="subject-card">
+            <button id="programacaoButton" class="subject-card">
+                <div class="icon">💻</div>
+                <h3>Programação</h3>
 
-            <div class="icon">🤖</div>
+                <p>
+                    Aprenda como códigos podem controlar sistemas
+                    e criar simuladores.
+                </p>
 
-            <h3>Robótica</h3>
+                <div class="formula">
+                    if (launch)
+                </div>
 
-            <p>
-                Sensores, motores e microcontroladores podem
-                transformar conceitos digitais em sistemas físicos.
-            </p>
+                <span class="card-link">
+                    Estudar →
+                </span>
+            </button>
 
-            <div class="formula">
-                Sensor → Arduino → Motor
-            </div>
+
+            <button id="roboticaButton" class="subject-card">
+                <div class="icon">🤖</div>
+                <h3>Robótica</h3>
+
+                <p>
+                    Conheça sensores, motores, Arduino e sistemas
+                    de controle.
+                </p>
+
+                <div class="formula">
+                    Sensor → Arduino → Motor
+                </div>
+
+                <span class="card-link">
+                    Estudar →
+                </span>
+            </button>
+
+
+            <button id="propulsaoButton" class="subject-card">
+                <div class="icon">🔥</div>
+                <h3>Propulsão</h3>
+
+                <p>
+                    Descubra como o empuxo movimenta um foguete.
+                </p>
+
+                <div class="formula">
+                    Empuxo &gt; Peso
+                </div>
+
+                <span class="card-link">
+                    Estudar →
+                </span>
+            </button>
+
+
+            <button id="aerodinamicaButton" class="subject-card">
+                <div class="icon">🌬️</div>
+                <h3>Aerodinâmica</h3>
+
+                <p>
+                    Entenda como o ar interfere no movimento do foguete.
+                </p>
+
+                <div class="formula">
+                    Força do ar → Movimento
+                </div>
+
+                <span class="card-link">
+                    Estudar →
+                </span>
+            </button>
+
+
+            <button id="astronomiaButton" class="subject-card">
+                <div class="icon">🛰️</div>
+                <h3>Astronomia</h3>
+
+                <p>
+                    Explore planetas, estrelas, satélites e órbitas.
+                </p>
+
+                <div class="formula">
+                    Órbita = velocidade + gravidade
+                </div>
+
+                <span class="card-link">
+                    Estudar →
+                </span>
+            </button>
+
+
+            <button id="matematicaButton" class="subject-card">
+                <div class="icon">📐</div>
+                <h3>Matemática</h3>
+
+                <p>
+                    Utilize cálculos para determinar velocidade,
+                    distância e trajetória.
+                </p>
+
+                <div class="formula">
+                    v = Δs / Δt
+                </div>
+
+                <span class="card-link">
+                    Estudar →
+                </span>
+            </button>
+
+
+            <button id="engenhariaButton" class="subject-card">
+                <div class="icon">🛠️</div>
+                <h3>Engenharia</h3>
+
+                <p>
+                    Conheça o processo de criação, testes e
+                    desenvolvimento de foguetes.
+                </p>
+
+                <div class="formula">
+                    Projeto → Teste → Lançamento
+                </div>
+
+                <span class="card-link">
+                    Estudar →
+                </span>
+            </button>
 
         </div>
 
@@ -166,102 +257,104 @@
     <section id="simulador" class="simulation-section">
 
         <div class="section-title">
+            <p class="tag">🚀 ROCKET SIMULATOR</p>
 
-            <p class="tag">LABORATÓRIO VIRTUAL</p>
-
-            <h2>Simulador de lançamento</h2>
+            <h2>Simulação de lançamento</h2>
 
             <p>
-                Configure os parâmetros e observe o foguete
-                durante o lançamento.
+                Configure os parâmetros do foguete e observe sua trajetória.
             </p>
-
         </div>
 
 
         <div class="simulator">
 
-            <!-- PAINEL -->
             <div class="controls">
 
-                <h3>🎛️ Parâmetros</h3>
+                <h3>⚙️ Parâmetros</h3>
 
-                <label>
-                    Potência do motor
-                    <span id="powerValue">70%</span>
+
+                <label for="power">
+                    Potência
+                    <span id="powerValue">80%</span>
                 </label>
 
                 <input
-                    type="range"
                     id="power"
-                    min="20"
-                    max="100"
-                    value="70"
-                >
-
-
-                <label>
-                    Massa do foguete
-                    <span id="massValue">50 kg</span>
-                </label>
-
-                <input
                     type="range"
-                    id="mass"
                     min="10"
                     max="100"
-                    value="50"
+                    value="80"
                 >
 
 
-                <label>
+                <label for="mass">
+                    Massa
+                    <span id="massValue">5 kg</span>
+                </label>
+
+                <input
+                    id="mass"
+                    type="range"
+                    min="1"
+                    max="20"
+                    value="5"
+                >
+
+
+                <label for="angle">
                     Ângulo
                     <span id="angleValue">90°</span>
                 </label>
 
                 <input
-                    type="range"
                     id="angle"
-                    min="45"
-                    max="90"
+                    type="range"
+                    min="30"
+                    max="150"
                     value="90"
                 >
 
 
                 <button id="launchButton" class="launch">
-                    🚀 LANÇAR FOGUETE
+                    🚀 LANÇAR
                 </button>
 
                 <button id="resetButton" class="reset">
-                    ↻ Reiniciar
+                    🔄 RESETAR
                 </button>
 
             </div>
 
 
-            <!-- ÁREA DE SIMULAÇÃO -->
             <div class="simulation">
 
                 <canvas id="rocketCanvas"></canvas>
+
 
                 <div class="data-panel">
 
                     <div>
                         <small>ALTITUDE</small>
+
                         <strong>
                             <span id="altitude">0</span> m
                         </strong>
                     </div>
 
+
                     <div>
                         <small>VELOCIDADE</small>
+
                         <strong>
                             <span id="velocity">0</span> m/s
                         </strong>
                     </div>
 
+
                     <div>
                         <small>TEMPO</small>
+
                         <strong>
                             <span id="time">0</span> s
                         </strong>
@@ -277,22 +370,19 @@
 
 
     <!-- FÍSICA -->
-    <section class="physics">
+    <section id="fisica" class="physics">
 
         <div class="physics-text">
 
-            <p class="tag">FÍSICA DO LANÇAMENTO</p>
+            <p class="tag">⚛️ FÍSICA</p>
 
             <h2>
-                A ciência por trás
-                do foguete
+                As leis por trás do lançamento.
             </h2>
 
             <p>
-                Para simplificar a simulação, consideramos uma
-                força inicial de propulsão e a ação da gravidade.
-                A aceleração pode ser relacionada pela segunda
-                lei de Newton:
+                O movimento de um foguete pode ser estudado utilizando
+                conceitos como força, massa, aceleração e gravidade.
             </p>
 
             <div class="big-formula">
@@ -301,32 +391,36 @@
 
         </div>
 
+
         <div class="physics-cards">
 
             <div>
                 <span>01</span>
-                <h3>Empuxo</h3>
+                <h3>Força</h3>
+
                 <p>
-                    O motor produz uma força que impulsiona
-                    o foguete para cima.
+                    A força pode alterar o movimento de um objeto.
                 </p>
             </div>
+
 
             <div>
                 <span>02</span>
                 <h3>Gravidade</h3>
+
                 <p>
-                    A gravidade terrestre atua constantemente
-                    sobre o foguete.
+                    A gravidade atrai o foguete em direção à Terra.
                 </p>
             </div>
+
 
             <div>
                 <span>03</span>
                 <h3>Aceleração</h3>
+
                 <p>
-                    A relação entre força e massa determina
-                    a aceleração do sistema.
+                    A aceleração representa a mudança da velocidade
+                    ao longo do tempo.
                 </p>
             </div>
 
@@ -334,27 +428,28 @@
 
     </section>
 
-
-    <!-- RODAPÉ -->
-    <footer>
-
-        <div class="logo">
-            🚀 RocketLab
-        </div>
-
-        <p>
-            Física • Programação • Robótica
-        </p>
-
-        <p class="copyright">
-            Projeto educacional desenvolvido com HTML,
-            CSS e JavaScript.
-        </p>
-
-    </footer>
+</main>
 
 
-    <script src="script.js"></script>
+<footer>
+
+    <div class="logo">
+        🚀 Rocket<span>Lab</span>
+    </div>
+
+    <p>
+        Física • Programação • Robótica • Espaço
+    </p>
+
+    <p class="copyright">
+        © 2026 RocketLab
+    </p>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
 
 </body>
 </html>

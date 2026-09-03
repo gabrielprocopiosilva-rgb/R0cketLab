@@ -1,9 +1,8 @@
-// Verificar se os elementos existem
-const canvas = document.getElementById("rocketCanvas");
-if (!canvas) {
-    console.error("Canvas não encontrado!");
-}
+// ==========================================
+// ROCKETLAB - SIMULADOR
+// ==========================================
 
+const canvas = document.getElementById("rocketCanvas");
 const ctx = canvas ? canvas.getContext("2d") : null;
 
 const power = document.getElementById("power");
@@ -14,155 +13,206 @@ const powerValue = document.getElementById("powerValue");
 const massValue = document.getElementById("massValue");
 const angleValue = document.getElementById("angleValue");
 
+const launchButton = document.getElementById("launchButton");
+const resetButton = document.getElementById("resetButton");
+
 const altitudeElement = document.getElementById("altitude");
 const velocityElement = document.getElementById("velocity");
 const timeElement = document.getElementById("time");
 
-const launchButton =
-    document.getElementById("launchButton");
 
-const resetButton =
-    document.getElementById("resetButton");
-
-
-/* VALORES */
+// ==========================================
+// VARIÁVEIS DA SIMULAÇÃO
+// ==========================================
 
 let altitude = 0;
 let velocity = 0;
 let simulationTime = 0;
+let horizontalDistance = 0;
+let verticalVelocity = 0;
+let horizontalVelocity = 0;
 
 let rocketX = 0;
 let rocketY = 0;
 
 let running = false;
+let lastTime = 0;
+let simulationStars = [];
 
-let animation;
+const gravity = 9.81;
 
 
-/* AJUSTAR CANVAS */
+// ==========================================
+// TAMANHO DO CANVAS
+// ==========================================
 
 function resizeCanvas() {
+
     if (!canvas) return;
 
-    const rect = canvas.parentElement.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = Math.max(550, rect.height);
+    const rect = canvas.getBoundingClientRect();
 
-    rocketX = canvas.width / 2;
-    rocketY = canvas.height - 80;
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    simulationStars = Array.from({ length: 90 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height * 0.78,
+        size: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.7 + 0.3
+    }));
+
+    drawScene();
 }
 
 window.addEventListener("resize", resizeCanvas);
 
-// Aguardar carregamento completo da página
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", resizeCanvas);
-} else {
-    resizeCanvas();
+
+// ==========================================
+// ATUALIZAR VALORES DOS SLIDERS
+// ==========================================
+
+function updateSliderValues() {
+
+    if (power && powerValue) {
+        powerValue.textContent = `${power.value}%`;
+    }
+
+    if (mass && massValue) {
+        massValue.textContent = `${mass.value} kg`;
+    }
+
+    if (angle && angleValue) {
+        angleValue.textContent = `${angle.value}°`;
+    }
 }
 
-
-/* ATUALIZAR SLIDERS */
-
 if (power) {
-    power.addEventListener(
-        "input",
-        () => {
-            if (powerValue) {
-                powerValue.textContent =
-                    power.value + "%";
-            }
-        }
-    );
+    power.addEventListener("input", updateSliderValues);
 }
 
 if (mass) {
-    mass.addEventListener(
-        "input",
-        () => {
-            if (massValue) {
-                massValue.textContent =
-                    mass.value + " kg";
-            }
-        }
-    );
+    mass.addEventListener("input", updateSliderValues);
 }
 
 if (angle) {
-    angle.addEventListener(
-        "input",
-        () => {
-            if (angleValue) {
-                angleValue.textContent =
-                    angle.value + "°";
-            }
-            // Redesenhar imediatamente
-            draw();
-        }
-    );
+    angle.addEventListener("input", updateSliderValues);
 }
 
 
-/* DESENHAR CÉU */
+// ==========================================
+// ATUALIZAR PAINEL
+// ==========================================
 
-function drawBackground() {
+function updateDataPanel() {
+
+    if (altitudeElement) {
+        altitudeElement.textContent = altitude.toFixed(1);
+    }
+
+    if (velocityElement) {
+        velocityElement.textContent = velocity.toFixed(1);
+    }
+
+    if (timeElement) {
+        timeElement.textContent = simulationTime.toFixed(1);
+    }
+}
+
+
+// ==========================================
+// CENÁRIO
+// ==========================================
+
+function drawScene() {
+
     if (!ctx || !canvas) return;
 
-    ctx.clearRect(
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Fundo
+    const gradient = ctx.createLinearGradient(
+        0,
+        0,
+        0,
+        canvas.height
+    );
+
+    gradient.addColorStop(0, "#020617");
+    gradient.addColorStop(1, "#0f172a");
+
+    ctx.fillStyle = gradient;
+
+    ctx.fillRect(
         0,
         0,
         canvas.width,
         canvas.height
     );
 
-    /* estrelas */
 
-    for(let i = 0; i < 80; i++) {
-
-        const x =
-            (i * 137) %
-            canvas.width;
-
-        const y =
-            (i * 71) %
-            canvas.height;
-
+    // Estrelas com posições aleatórias estáveis durante o voo
+    simulationStars.forEach(star => {
+        ctx.globalAlpha = star.opacity;
         ctx.fillStyle = "white";
-
-        ctx.globalAlpha =
-            0.3 + (i % 5) / 10;
-
         ctx.beginPath();
-
-        ctx.arc(
-            x,
-            y,
-            1.2,
-            0,
-            Math.PI * 2
-        );
-
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();
-    }
+    });
 
     ctx.globalAlpha = 1;
 
 
-    /* planeta / solo */
+    // Lua
+    ctx.beginPath();
 
-    ctx.fillStyle = "#0f172a";
+    ctx.arc(
+        canvas.width - 80,
+        70,
+        30,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = "#e2e8f0";
+
+    ctx.fill();
+
+
+    // Solo
+    ctx.fillStyle = "#14532d";
 
     ctx.fillRect(
         0,
-        canvas.height - 35,
+        canvas.height - 45,
         canvas.width,
-        35
+        45
     );
 
+
+    updateRocketPosition();
+    drawRocket();
 }
 
 
+// ==========================================
+// DESENHAR FOGUETE
+// ==========================================
+
 /* DESENHAR FOGUETE */
+
+function updateRocketPosition() {
+    if (!canvas) return;
+
+    const groundLevel = canvas.height - 45;
+    const altitudeScale = Math.max(1, canvas.height * 0.004);
+
+    rocketX = canvas.width / 2 + horizontalDistance * altitudeScale;
+    rocketY = groundLevel - altitude * altitudeScale;
+
+    if (rocketX < 25) rocketX = canvas.width - 25;
+    if (rocketX > canvas.width - 25) rocketX = 25;
+}
 
 function drawRocket() {
     if (!ctx) return;
@@ -175,7 +225,7 @@ function drawRocket() {
     );
 
     ctx.rotate(
-        -(Number(angle.value) - 90)
+        -(Number(angle ? angle.value : 90) - 90)
         * Math.PI / 180
     );
 
@@ -284,224 +334,494 @@ function drawRocket() {
 }
 
 
-/* DESENHAR */
+// ==========================================
+// FÍSICA DO SIMULADOR
+// ==========================================
 
-function draw() {
-    if (!ctx) return;
+function updateSimulation(dt) {
 
-    drawBackground();
-
-    drawRocket();
-
-}
+    if (!power || !mass || !angle) return;
 
 
-/* FÍSICA SIMPLIFICADA */
+    const powerValueNumber =
+        Number(power.value);
 
-function updatePhysics() {
-
-    const motorForce =
-        Number(power.value) * 2.5;
 
     const rocketMass =
         Number(mass.value);
 
-    const gravity = 9.81;
+
+    const launchAngle =
+        Number(angle.value);
 
 
-    /*
-        Segunda lei de Newton:
+    // Modelo educacional simplificado
+    const motorForce =
+        powerValueNumber * 2.5;
 
-        F = m × a
-
-        portanto:
-
-        a = F / m
-    */
 
     const acceleration =
-        motorForce /
-        rocketMass;
+        motorForce / rocketMass;
+
+    const angleRadians =
+        launchAngle *
+        Math.PI /
+        180;
+
+    const verticalAcceleration =
+        acceleration * Math.sin(angleRadians) - gravity;
+    const horizontalAcceleration =
+        acceleration * Math.cos(angleRadians);
+
+    verticalVelocity += verticalAcceleration * dt;
+    horizontalVelocity += horizontalAcceleration * dt;
+
+    altitude += verticalVelocity * dt;
+    horizontalDistance += horizontalVelocity * dt;
+    velocity = Math.sqrt(
+        verticalVelocity ** 2 + horizontalVelocity ** 2
+    );
 
 
-    /*
-        aceleração resultante
-        considerando a gravidade
-        (dividido por 50 para escala)
-    */
-
-    const netAcceleration =
-        (acceleration - gravity) / 50;
+    // Tempo
+    simulationTime += dt;
 
 
-    velocity +=
-        netAcceleration * 0.05;
-
-
-    altitude +=
-        velocity * 0.05;
-
-
-    /* impedir altitude negativa */
-
-    if(altitude < 0) {
+    // Limite inferior
+    if (altitude < 0) {
 
         altitude = 0;
-
         velocity = 0;
+        verticalVelocity = 0;
+        horizontalVelocity = 0;
+        horizontalDistance = 0;
 
     }
 
 
-    simulationTime += 0.05;
+    updateDataPanel();
 
-
-    /*
-        posição visual
-
-        usamos uma escala para que
-        o foguete permaneça visível
-    */
-
-    const scale = 2;
-
-    rocketY =
-        canvas.height -
-        80 -
-        altitude * scale;
-
-
-    /*
-        limite visual
-    */
-
-    if(rocketY < 80) {
-
-        rocketY = 80;
-
-    }
-
-
-    altitudeElement.textContent =
-        altitude.toFixed(1);
-
-    velocityElement.textContent =
-        Math.max(0, velocity).toFixed(1);
-
-    timeElement.textContent =
-        simulationTime.toFixed(2);
-
+    drawScene();
 }
 
 
-/* LOOP */
+// ==========================================
+// LOOP DA ANIMAÇÃO
+// ==========================================
 
-function animate() {
+function animate(timestamp) {
 
-    if(!running)
-        return;
+    if (!running) return;
 
-    updatePhysics();
 
-    draw();
+    if (!lastTime) {
+        lastTime = timestamp;
+    }
 
-    /*
-        quando o foguete
-        retorna ao solo
-    */
 
-    if(
-        altitude <= 0 &&
-        simulationTime > 1
+    const dt =
+        Math.min(
+            (timestamp - lastTime) / 1000,
+            0.05
+        );
+
+
+    lastTime = timestamp;
+
+
+    updateSimulation(dt);
+
+
+    // Para quando retornar ao solo
+    if (
+        simulationTime > 0.5 &&
+        velocity <= 0 &&
+        altitude <= 0
     ) {
 
         running = false;
-        
-        // Resetar para posição final
-        altitudeElement.textContent = "0";
-        velocityElement.textContent = "0";
-
-        return;
 
     }
 
-    animation =
-        requestAnimationFrame(
-            animate
-        );
+
+    if (running) {
+        requestAnimationFrame(animate);
+    }
 }
 
 
-/* LANÇAR */
+// ==========================================
+// LANÇAR
+// ==========================================
 
 if (launchButton) {
+
     launchButton.addEventListener(
         "click",
         () => {
 
-            if(running)
-                return;
+            if (running) return;
+
+
+            // Reinicia os dados
+            altitude = 0;
+            velocity = 0;
+            simulationTime = 0;
+            horizontalDistance = 0;
+            verticalVelocity = 0;
+            horizontalVelocity = 0;
+
 
             running = true;
 
-            altitude = 0;
+            lastTime = 0;
 
-            velocity = 0;
 
-            simulationTime = 0;
+            updateDataPanel();
 
-            rocketY =
-                canvas.height - 80;
-
-            animate();
+            requestAnimationFrame(animate);
 
         }
     );
+
 }
 
 
-/* RESET */
+// ==========================================
+// RESETAR
+// ==========================================
 
 if (resetButton) {
+
     resetButton.addEventListener(
         "click",
         () => {
 
             running = false;
 
-            cancelAnimationFrame(
-                animation
-            );
-
             altitude = 0;
-
             velocity = 0;
-
             simulationTime = 0;
+            horizontalDistance = 0;
+            verticalVelocity = 0;
+            horizontalVelocity = 0;
 
-            rocketY =
-                canvas.height - 80;
+            lastTime = 0;
 
-            if (altitudeElement) 
-                altitudeElement.textContent = "0";
+            updateDataPanel();
 
-            if (velocityElement) 
-                velocityElement.textContent = "0";
-
-            if (timeElement) 
-                timeElement.textContent = "0";
-
-            draw();
+            drawScene();
 
         }
     );
+
 }
 
 
-/* PRIMEIRO DESENHO */
+// ==========================================
+// STUDY CARDS
+// ==========================================
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", draw);
-} else {
-    draw();
+const studyContent = {
+
+    fisica: {
+
+        title: "⚛️ Física",
+
+        description:
+            "A Física permite compreender as forças e os movimentos envolvidos no lançamento de um foguete.",
+
+        topics: [
+            "Força e movimento",
+            "Leis de Newton",
+            "Gravidade",
+            "Aceleração",
+            "Velocidade"
+        ],
+
+        formula: "F = m × a"
+
+    },
+
+
+    programacao: {
+
+        title: "💻 Programação",
+
+        description:
+            "A programação permite criar simuladores, controlar sistemas e processar dados.",
+
+        topics: [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "Algoritmos",
+            "Lógica de programação"
+        ],
+
+        formula: "if (launch) { start(); }"
+
+    },
+
+
+    robotica: {
+
+        title: "🤖 Robótica",
+
+        description:
+            "A robótica combina programação, eletrônica e mecânica para criar sistemas automatizados.",
+
+        topics: [
+            "Arduino",
+            "Sensores",
+            "Motores",
+            "Microcontroladores",
+            "Automação"
+        ],
+
+        formula: "Sensor → Controlador → Atuador"
+
+    },
+
+
+    propulsao: {
+
+        title: "🔥 Propulsão",
+
+        description:
+            "A propulsão está relacionada à geração de empuxo capaz de movimentar um veículo.",
+
+        topics: [
+            "Empuxo",
+            "Força",
+            "Massa",
+            "Aceleração",
+            "Conservação do momento"
+        ],
+
+        formula: "Empuxo → Movimento"
+
+    },
+
+
+    aerodinamica: {
+
+        title: "🌬️ Aerodinâmica",
+
+        description:
+            "A aerodinâmica estuda como o ar interage com objetos em movimento.",
+
+        topics: [
+            "Arrasto",
+            "Sustentação",
+            "Resistência do ar",
+            "Formato do foguete",
+            "Estabilidade"
+        ],
+
+        formula: "Forças aerodinâmicas → Movimento"
+
+    },
+
+
+    astronomia: {
+
+        title: "🛰️ Astronomia",
+
+        description:
+            "A Astronomia estuda corpos celestes, movimentos e fenômenos do universo.",
+
+        topics: [
+            "Planetas",
+            "Estrelas",
+            "Satélites",
+            "Órbitas",
+            "Sistema Solar"
+        ],
+
+        formula: "Órbita = velocidade + gravidade"
+
+    },
+
+
+    matematica: {
+
+        title: "📐 Matemática",
+
+        description:
+            "A Matemática permite calcular grandezas importantes para analisar trajetórias.",
+
+        topics: [
+            "Velocidade",
+            "Distância",
+            "Tempo",
+            "Ângulos",
+            "Gráficos"
+        ],
+
+        formula: "v = Δs / Δt"
+
+    },
+
+
+    engenharia: {
+
+        title: "🛠️ Engenharia",
+
+        description:
+            "A Engenharia utiliza ciência e tecnologia para desenvolver e testar sistemas.",
+
+        topics: [
+            "Projeto",
+            "Modelagem",
+            "Testes",
+            "Materiais",
+            "Sistemas"
+        ],
+
+        formula: "Projeto → Teste → Análise"
+
+    }
+
+};
+
+
+// ==========================================
+// ABRIR ESTUDO
+// ==========================================
+
+function openStudy(type) {
+
+    const data = studyContent[type];
+
+    if (!data) return;
+
+
+    const oldArea =
+        document.getElementById("studyArea");
+
+
+    if (oldArea) {
+        oldArea.remove();
+    }
+
+
+    const area =
+        document.createElement("section");
+
+
+    area.id = "studyArea";
+
+    area.className = "study-area active";
+
+
+    area.innerHTML = `
+
+        <div class="study-container">
+
+            <button class="close-study">
+                ✕
+            </button>
+
+            <p class="tag">
+                📚 ÁREA DE ESTUDO
+            </p>
+
+            <h2>
+                ${data.title}
+            </h2>
+
+            <p class="study-description">
+                ${data.description}
+            </p>
+
+            <div class="study-topics">
+
+                ${data.topics.map(topic => `
+                    <div class="study-topic">
+                        ✓ ${topic}
+                    </div>
+                `).join("")}
+
+            </div>
+
+            <div class="study-formula">
+                ${data.formula}
+            </div>
+
+        </div>
+    `;
+
+
+    const subjects =
+        document.querySelector(".subjects");
+
+
+    if (subjects) {
+
+        subjects.after(area);
+
+        area.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+
+    const closeButton =
+        area.querySelector(".close-study");
+
+
+    closeButton.addEventListener(
+        "click",
+        () => {
+
+            area.remove();
+
+        }
+    );
+
 }
+
+
+// ==========================================
+// LIGAR OS 8 BOTÕES
+// ==========================================
+
+const studyButtons = {
+    fisicaButton: "fisica",
+    programacaoButton: "programacao",
+    roboticaButton: "robotica"
+};
+
+
+Object.entries(studyButtons).forEach(
+    ([buttonId, type]) => {
+
+        const button =
+            document.getElementById(buttonId);
+
+
+        if (button) {
+
+            button.addEventListener(
+                "click",
+                () => openStudy(type)
+            );
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
+
+updateSliderValues();
+
+updateDataPanel();
+
+resizeCanvas();
