@@ -77,6 +77,24 @@ header {
     filter: drop-shadow(0 0 12px rgba(56, 189, 248, .7));
 }
 
+.footer-logo {
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.footer-logo img {
+    display: block;
+    width: 160px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, .6));
+    transition: .3s ease;
+}
+
+.footer-logo:hover img {
+    transform: scale(1.04);
+}
+
 .navbar ul {
     list-style: none;
 
