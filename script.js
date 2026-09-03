@@ -354,10 +354,21 @@ function updateRocketPosition() {
     // A câmera acompanha o foguete, mantendo-o visível durante o voo.
     cameraX = horizontalDistance * altitudeScale * 0.45;
     cameraY = altitude * altitudeScale;
-    rocketX = canvas.width / 2 + horizontalDistance * altitudeScale - cameraX;
-    rocketY = altitude > 0
+    const projectedX = canvas.width / 2
+        + horizontalDistance * altitudeScale
+        - cameraX;
+    const projectedY = altitude > 0
         ? canvas.height * 0.58
         : canvas.height - 81;
+
+    rocketX = Math.min(
+        Math.max(projectedX, 60),
+        canvas.width - 60
+    );
+    rocketY = Math.min(
+        Math.max(projectedY, parachuteDeployed ? 145 : 55),
+        canvas.height - 80
+    );
 }
 
 function drawLaunchAngleGuide() {

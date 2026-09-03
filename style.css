@@ -335,10 +335,12 @@ header {
     font-size: 28px;
 
     margin-bottom: 15px;
+
+    color: #ffffff;
 }
 
 .subject-card p {
-    color: #94a3b8;
+    color: #ffffff;
 
     line-height: 1.7;
 }
@@ -510,7 +512,7 @@ input[type="range"] {
 }
 
 .data-panel div {
-    background: rgba(15,23,42,.85);
+    background: rgba(247, 247, 249, 0.85);
 
     padding: 15px;
 
