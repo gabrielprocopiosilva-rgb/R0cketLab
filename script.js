@@ -20,6 +20,7 @@ const altitudeElement = document.getElementById("altitude");
 const velocityElement = document.getElementById("velocity");
 const timeElement = document.getElementById("time");
 const trajectoryAngleElement = document.getElementById("trajectoryAngle");
+const motorForceElement = document.getElementById("motorForce");
 
 
 // ==========================================
@@ -29,6 +30,7 @@ const trajectoryAngleElement = document.getElementById("trajectoryAngle");
 let altitude = 0;
 let velocity = 0;
 let simulationTime = 0;
+let motorForce = 0;
 let horizontalDistance = 0;
 let verticalVelocity = 0;
 let horizontalVelocity = 0;
@@ -116,7 +118,14 @@ function updateSliderValues() {
 }
 
 if (power) {
-    power.addEventListener("input", updateSliderValues);
+    power.addEventListener("input", () => {
+        updateSliderValues();
+
+        if (!running) {
+            motorForce = Number(power.value) * 2.5;
+            updateDataPanel();
+        }
+    });
 }
 
 if (mass) {
@@ -163,6 +172,10 @@ function updateDataPanel() {
         trajectoryAngleElement.textContent = (
             running && !parachuteDeployed ? currentAngle : launchAngle
         ).toFixed(1);
+    }
+
+    if (motorForceElement) {
+        motorForceElement.textContent = motorForce.toFixed(1);
     }
 }
 
@@ -539,7 +552,9 @@ function updateSimulation(dt) {
     }
 
     // Modelo com empuxo, gravidade e resistência do ar
-    const motorForce = powerValueNumber * 2.5;
+    motorForce = simulationTime < burnTime
+        ? powerValueNumber * 2.5
+        : 0;
     const thrustAcceleration = simulationTime < burnTime
         ? motorForce / currentMass
         : 0;
@@ -673,6 +688,7 @@ if (launchButton) {
             cameraY = 0;
             launchAngle = Number(angle.value);
             parachuteDeployed = false;
+            motorForce = Number(power.value) * 2.5;
 
 
             running = true;
@@ -712,6 +728,7 @@ if (resetButton) {
             cameraY = 0;
             launchAngle = Number(angle?.value || 90);
             parachuteDeployed = false;
+            motorForce = Number(power?.value || 0) * 2.5;
 
             lastTime = 0;
 
@@ -1027,6 +1044,7 @@ Object.entries(studyButtons).forEach(
 // INICIALIZAÇÃO
 // ==========================================
 
+motorForce = Number(power?.value || 0) * 2.5;
 updateSliderValues();
 
 updateDataPanel();
