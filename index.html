@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <link rel="icon" type="image/png" href="./logo.png">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,9 +16,46 @@
 
     <header>
     <nav class="navbar">
-        <div href="inicio" class="logo">
-    <img src="./logo.png" alt="RocketLab">
-        </div>
+    <a href="#inicio" class="logo" aria-label="RocketLab - início">
+        <svg
+        class="rocketlab-logo"
+            xmlns="http://www.w3.org/2000/svg"
+        width="220"
+        height="65"
+            viewBox="0 0 150 100"
+        >
+            <defs>
+                <linearGradient id="logoBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#3b82f6" />
+                    <stop offset="100%" stop-color="#1d4ed8" />
+                </linearGradient>
+            </defs>
+
+            <text
+                x="10"
+                y="65"
+                font-family="Arial, Helvetica, sans-serif"
+                font-size="42"
+                font-weight="800"
+                fill="url(#logoBlue)"
+            >
+            Lab
+        </text>
+
+        <!-- Subtítulo -->
+        <text
+            x="108"
+            y="78"
+            font-family="Arial, Helvetica, sans-serif"
+            font-size="10"
+            letter-spacing="4"
+            fill="#94a3b8"
+        >
+            LABORATÓRIO ESPACIAL
+        </text>
+    </svg>
+
+        </a>
 
         <ul>
             <li><a href="#inicio">Início</a></li>
