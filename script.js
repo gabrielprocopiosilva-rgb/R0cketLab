@@ -43,6 +43,8 @@ let simulationStars = [];
 let spacePlanets = [];
 
 const gravity = 9.81;
+const burnTime = 4;
+const dragCoefficient = 0.018;
 
 
 // ==========================================
@@ -423,13 +425,11 @@ function updateSimulation(dt) {
         Number(angle.value);
 
 
-    // Modelo educacional simplificado
-    const motorForce =
-        powerValueNumber * 2.5;
-
-
-    const acceleration =
-        motorForce / rocketMass;
+    // Modelo com empuxo, gravidade e resistência do ar
+    const motorForce = powerValueNumber * 2.5;
+    const thrustAcceleration = simulationTime < burnTime
+        ? motorForce / rocketMass
+        : 0;
 
     const angleRadians =
         launchAngle *
@@ -437,9 +437,12 @@ function updateSimulation(dt) {
         180;
 
     const verticalAcceleration =
-        acceleration * Math.sin(angleRadians) - gravity;
+        thrustAcceleration * Math.sin(angleRadians)
+        - gravity
+        - verticalVelocity * dragCoefficient;
     const horizontalAcceleration =
-        -acceleration * Math.cos(angleRadians);
+        -thrustAcceleration * Math.cos(angleRadians)
+        - horizontalVelocity * dragCoefficient;
 
     verticalVelocity += verticalAcceleration * dt;
     horizontalVelocity += horizontalAcceleration * dt;
