@@ -504,7 +504,7 @@ input[type="range"] {
     display: grid;
 
     grid-template-columns:
-        repeat(3,1fr);
+        repeat(4,1fr);
 
     gap: 10px;
 }
@@ -661,6 +661,10 @@ footer p {
 
     .rocket-container {
         height: 300px;
+    }
+
+    .data-panel {
+        grid-template-columns: repeat(2, 1fr);
     }
 
 }

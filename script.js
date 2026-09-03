@@ -19,6 +19,7 @@ const resetButton = document.getElementById("resetButton");
 const altitudeElement = document.getElementById("altitude");
 const velocityElement = document.getElementById("velocity");
 const timeElement = document.getElementById("time");
+const trajectoryAngleElement = document.getElementById("trajectoryAngle");
 
 
 // ==========================================
@@ -36,6 +37,7 @@ let rocketX = 0;
 let rocketY = 0;
 let cameraX = 0;
 let cameraY = 0;
+let launchAngle = 90;
 
 let running = false;
 let lastTime = 0;
@@ -44,7 +46,9 @@ let spacePlanets = [];
 
 const gravity = 9.81;
 const burnTime = 4;
-const dragCoefficient = 0.018;
+const dragCoefficient = 0.42;
+const referenceArea = 0.8;
+const airDensityAtSeaLevel = 1.225;
 
 
 // ==========================================
@@ -138,6 +142,17 @@ function updateDataPanel() {
 
     if (timeElement) {
         timeElement.textContent = simulationTime.toFixed(1);
+    }
+
+    if (trajectoryAngleElement) {
+        const currentAngle = Math.atan2(
+            Math.max(0, verticalVelocity),
+            Math.abs(horizontalVelocity)
+        ) * 180 / Math.PI;
+
+        trajectoryAngleElement.textContent = (
+            velocity > 0 ? currentAngle : launchAngle
+        ).toFixed(1);
     }
 }
 
@@ -263,6 +278,21 @@ function drawScene() {
     drawRocket();
 }
 
+function updateStarfield(dt) {
+    const starMotionX = horizontalVelocity * dt * 0.12;
+    const starMotionY = verticalVelocity * dt * 0.08;
+
+    simulationStars.forEach(star => {
+        star.x += starMotionX;
+        star.y += starMotionY;
+
+        if (star.x < -10) star.x = canvas.width + 10;
+        if (star.x > canvas.width + 10) star.x = -10;
+        if (star.y < -10) star.y = canvas.height * 0.78;
+        if (star.y > canvas.height * 0.78) star.y = -10;
+    });
+}
+
 
 // ==========================================
 // DESENHAR FOGUETE
@@ -295,7 +325,7 @@ function drawRocket() {
     );
 
     ctx.rotate(
-        (Number(angle ? angle.value : 90) - 90)
+        (launchAngle - 90)
         * Math.PI / 180
     );
 
@@ -417,19 +447,25 @@ function updateSimulation(dt) {
         Number(power.value);
 
 
-    const rocketMass =
+    const dryMass =
         Number(mass.value);
 
-
-    const launchAngle =
-        Number(angle.value);
+    const fuelMass = dryMass * 0.35;
+    const fuelUsed = Math.min(fuelMass, fuelMass * simulationTime / burnTime);
+    const currentMass = Math.max(0.1, dryMass - fuelUsed);
 
 
     // Modelo com empuxo, gravidade e resistência do ar
     const motorForce = powerValueNumber * 2.5;
     const thrustAcceleration = simulationTime < burnTime
-        ? motorForce / rocketMass
+        ? motorForce / currentMass
         : 0;
+
+    const airDensity = airDensityAtSeaLevel * Math.exp(-altitude / 8500);
+    const dragForceX = 0.5 * airDensity * dragCoefficient * referenceArea
+        * horizontalVelocity * Math.abs(horizontalVelocity);
+    const dragForceY = 0.5 * airDensity * dragCoefficient * referenceArea
+        * verticalVelocity * Math.abs(verticalVelocity);
 
     const angleRadians =
         launchAngle *
@@ -439,10 +475,10 @@ function updateSimulation(dt) {
     const verticalAcceleration =
         thrustAcceleration * Math.sin(angleRadians)
         - gravity
-        - verticalVelocity * dragCoefficient;
+        - dragForceY / currentMass;
     const horizontalAcceleration =
         -thrustAcceleration * Math.cos(angleRadians)
-        - horizontalVelocity * dragCoefficient;
+        - dragForceX / currentMass;
 
     verticalVelocity += verticalAcceleration * dt;
     horizontalVelocity += horizontalAcceleration * dt;
@@ -456,6 +492,7 @@ function updateSimulation(dt) {
 
     // Tempo
     simulationTime += dt;
+    updateStarfield(dt);
 
 
     // Limite inferior
@@ -543,6 +580,7 @@ if (launchButton) {
             horizontalVelocity = 0;
             cameraX = 0;
             cameraY = 0;
+            launchAngle = Number(angle.value);
 
 
             running = true;
@@ -580,6 +618,7 @@ if (resetButton) {
             horizontalVelocity = 0;
             cameraX = 0;
             cameraY = 0;
+            launchAngle = Number(angle?.value || 90);
 
             lastTime = 0;
 
