@@ -122,7 +122,15 @@ if (mass) {
 }
 
 if (angle) {
-    angle.addEventListener("input", updateSliderValues);
+    angle.addEventListener("input", () => {
+        updateSliderValues();
+
+        if (!running) {
+            launchAngle = Number(angle.value);
+            updateDataPanel();
+            drawScene();
+        }
+    });
 }
 
 
@@ -275,6 +283,7 @@ function drawScene() {
 
 
     updateRocketPosition();
+    drawLaunchAngleGuide();
     drawRocket();
 }
 
@@ -311,7 +320,38 @@ function updateRocketPosition() {
     rocketX = canvas.width / 2 + horizontalDistance * altitudeScale - cameraX;
     rocketY = altitude > 0
         ? canvas.height * 0.58
-        : canvas.height - 95;
+        : canvas.height - 81;
+}
+
+function drawLaunchAngleGuide() {
+    if (!ctx || !canvas || running || altitude > 0) return;
+
+    const originX = canvas.width / 2;
+    const originY = canvas.height - 51;
+    const angleRadians = launchAngle * Math.PI / 180;
+    const guideLength = 95;
+    const directionX = -Math.cos(angleRadians);
+    const directionY = -Math.sin(angleRadians);
+
+    ctx.save();
+    ctx.globalAlpha = 0.75;
+    ctx.strokeStyle = "#fbbf24";
+    ctx.fillStyle = "#fbbf24";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 5]);
+
+    ctx.beginPath();
+    ctx.moveTo(originX, originY);
+    ctx.lineTo(
+        originX + directionX * guideLength,
+        originY + directionY * guideLength
+    );
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+    ctx.font = "bold 14px Arial";
+    ctx.fillText(`${launchAngle.toFixed(0)}°`, originX + directionX * 55 - 12, originY + directionY * 55 - 8);
+    ctx.restore();
 }
 
 function drawRocket() {
