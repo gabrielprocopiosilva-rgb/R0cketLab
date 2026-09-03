@@ -13,7 +13,7 @@ const powerValue = document.getElementById("powerValue");
 const massValue = document.getElementById("massValue");
 const angleValue = document.getElementById("angleValue");
 
-const launchButton = document.getElementById("launchButton");
+const launchButton = document.getElementById("startSimulationButton");
 const resetButton = document.getElementById("resetButton");
 
 const altitudeElement = document.getElementById("altitude");
@@ -179,7 +179,7 @@ function drawScene() {
     ctx.fill();
 
 
-    // Solo
+    // Solo e plataforma de lançamento
     ctx.fillStyle = "#14532d";
 
     ctx.fillRect(
@@ -188,6 +188,12 @@ function drawScene() {
         canvas.width,
         45
     );
+
+    ctx.fillStyle = "#22c55e";
+    ctx.fillRect(0, canvas.height - 45, canvas.width, 4);
+
+    ctx.fillStyle = "#94a3b8";
+    ctx.fillRect(canvas.width / 2 - 34, canvas.height - 51, 68, 6);
 
 
     updateRocketPosition();
