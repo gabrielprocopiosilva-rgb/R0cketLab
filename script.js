@@ -38,6 +38,7 @@ let rocketY = 0;
 let running = false;
 let lastTime = 0;
 let simulationStars = [];
+let spacePlanets = [];
 
 const gravity = 9.81;
 
@@ -61,6 +62,23 @@ function resizeCanvas() {
         size: Math.random() * 2 + 1,
         opacity: Math.random() * 0.7 + 0.3
     }));
+
+    spacePlanets = [
+        {
+            x: canvas.width * 0.16,
+            y: canvas.height * 0.22,
+            radius: Math.min(canvas.width, canvas.height) * 0.08,
+            color: "#f97316",
+            ring: "#fdba74"
+        },
+        {
+            x: canvas.width * 0.82,
+            y: canvas.height * 0.42,
+            radius: Math.min(canvas.width, canvas.height) * 0.055,
+            color: "#38bdf8",
+            ring: "#bae6fd"
+        }
+    ];
 
     drawScene();
 }
@@ -162,6 +180,31 @@ function drawScene() {
 
     ctx.globalAlpha = 1;
 
+    // Planetas distantes para reforçar a perspectiva espacial
+    spacePlanets.forEach(planet => {
+        ctx.globalAlpha = Math.min(1, 0.25 + altitude / 500);
+        ctx.fillStyle = planet.color;
+        ctx.beginPath();
+        ctx.arc(planet.x, planet.y, planet.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = planet.ring;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(
+            planet.x,
+            planet.y,
+            planet.radius * 1.45,
+            planet.radius * 0.35,
+            -0.2,
+            0,
+            Math.PI * 2
+        );
+        ctx.stroke();
+    });
+
+    ctx.globalAlpha = 1;
+
 
     // Lua
     ctx.beginPath();
@@ -179,7 +222,9 @@ function drawScene() {
     ctx.fill();
 
 
-    // Solo e plataforma de lançamento
+    // O chão desaparece conforme o foguete ganha altitude
+    const groundOpacity = Math.max(0, 1 - altitude / 180);
+    ctx.globalAlpha = groundOpacity;
     ctx.fillStyle = "#14532d";
 
     ctx.fillRect(
@@ -194,6 +239,7 @@ function drawScene() {
 
     ctx.fillStyle = "#94a3b8";
     ctx.fillRect(canvas.width / 2 - 34, canvas.height - 51, 68, 6);
+    ctx.globalAlpha = 1;
 
 
     updateRocketPosition();
@@ -231,7 +277,7 @@ function drawRocket() {
     );
 
     ctx.rotate(
-        -(Number(angle ? angle.value : 90) - 90)
+        (Number(angle ? angle.value : 90) - 90)
         * Math.PI / 180
     );
 
@@ -377,7 +423,7 @@ function updateSimulation(dt) {
     const verticalAcceleration =
         acceleration * Math.sin(angleRadians) - gravity;
     const horizontalAcceleration =
-        acceleration * Math.cos(angleRadians);
+        -acceleration * Math.cos(angleRadians);
 
     verticalVelocity += verticalAcceleration * dt;
     horizontalVelocity += horizontalAcceleration * dt;
