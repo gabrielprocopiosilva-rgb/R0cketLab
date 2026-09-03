@@ -1,62 +1,46 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
+    <link rel="icon" type="image/png" href="./logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>RocketLab | Física, Programação e Robótica</title>
 
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    
+
     <div class="stars"></div>
 
     <header>
     <nav class="navbar">
-    <a href="#inicio" class="logo" aria-label="RocketLab - início">
+      <div class="logo-container">
         <svg
-        class="rocketlab-logo"
             xmlns="http://www.w3.org/2000/svg"
-        width="220"
-        height="65"
+            width="150"
+            height="100"
             viewBox="0 0 150 100"
         >
             <defs>
-                <linearGradient id="logoBlue" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#3b82f6" />
-                    <stop offset="100%" stop-color="#1d4ed8" />
+                <linearGradient id="rocketBody" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#e0f2fe" />
+                    <stop offset="100%" stop-color="#60a5fa" />
                 </linearGradient>
             </defs>
 
-            <text
-                x="10"
-                y="65"
-                font-family="Arial, Helvetica, sans-serif"
-                font-size="42"
-                font-weight="800"
-                fill="url(#logoBlue)"
-            >
-            Lab
-        </text>
-
-        <!-- Subtítulo -->
-        <text
-            x="108"
-            y="78"
-            font-family="Arial, Helvetica, sans-serif"
-            font-size="10"
-            letter-spacing="4"
-            fill="#94a3b8"
-        >
-            LABORATÓRIO ESPACIAL
-        </text>
+            <g transform="translate(75 50) rotate(-12)">
+                <path d="M0-38C16-27 20-10 20 12H-20C-20-10-16-27 0-38Z" fill="url(#rocketBody)" />
+                <path d="M-20 5-38 25-18 20Z" fill="#2563eb" />
+                <path d="M20 5 38 25 18 20Z" fill="#2563eb" />
+                <circle cx="0" cy="-8" r="7" fill="#0ea5e9" stroke="#e0f2fe" stroke-width="3" />
+                <path d="M-10 12H10L0 34Z" fill="#f97316" />
+                <path d="M-5 14H5L0 27Z" fill="#fde047" />
+            </g>
     </svg>
 
-        </a>
+        </div>
 
         <ul>
             <li><a href="#inicio">Início</a></li>
@@ -490,9 +474,9 @@
 
 <footer>
 
-    <a href="#inicio" class="logo footer-logo" aria-label="RocketLab - início">
-        <img src="./logo.png" alt="RocketLab">
-    </a>
+    <div class="logo">
+        🚀 Rocket<span>Lab</span>
+    </div>
 
     <p>
         Física • Programação • Robótica • Espaço
@@ -505,6 +489,8 @@
 </footer>
 
 <script src="script.js"></script>
+
+</body>
 
 </body>
 </html>
