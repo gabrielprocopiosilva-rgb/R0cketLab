@@ -38,6 +38,7 @@ let rocketY = 0;
 let cameraX = 0;
 let cameraY = 0;
 let launchAngle = 90;
+let parachuteDeployed = false;
 
 let running = false;
 let lastTime = 0;
@@ -45,6 +46,7 @@ let simulationStars = [];
 let spacePlanets = [];
 
 const gravity = 9.81;
+const maxAltitude = 999;
 const burnTime = 4;
 const dragCoefficient = 0.42;
 const referenceArea = 0.8;
@@ -159,7 +161,7 @@ function updateDataPanel() {
         ) * 180 / Math.PI;
 
         trajectoryAngleElement.textContent = (
-            velocity > 0 ? currentAngle : launchAngle
+            running && !parachuteDeployed ? currentAngle : launchAngle
         ).toFixed(1);
     }
 }
@@ -365,9 +367,28 @@ function drawRocket() {
     );
 
     ctx.rotate(
-        (launchAngle - 90)
+        (parachuteDeployed ? 0 : launchAngle - 90)
         * Math.PI / 180
     );
+
+    if (parachuteDeployed) {
+        ctx.strokeStyle = "#e2e8f0";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-10, -42);
+        ctx.lineTo(-38, -92);
+        ctx.moveTo(10, -42);
+        ctx.lineTo(38, -92);
+        ctx.stroke();
+
+        ctx.fillStyle = "#ef4444";
+        ctx.beginPath();
+        ctx.arc(0, -98, 42, Math.PI, 0);
+        ctx.lineTo(42, -98);
+        ctx.quadraticCurveTo(0, -72, -42, -98);
+        ctx.closePath();
+        ctx.fill();
+    }
 
     /* corpo */
 
@@ -426,7 +447,7 @@ function drawRocket() {
 
     /* chama */
 
-    if(running) {
+    if (running && !parachuteDeployed) {
 
         const flameHeight =
             20 + Math.random() * 25;
@@ -483,8 +504,7 @@ function updateSimulation(dt) {
     if (!power || !mass || !angle) return;
 
 
-    const powerValueNumber =
-        Number(power.value);
+    const powerValueNumber = Number(power.value);
 
 
     const dryMass =
@@ -494,6 +514,29 @@ function updateSimulation(dt) {
     const fuelUsed = Math.min(fuelMass, fuelMass * simulationTime / burnTime);
     const currentMass = Math.max(0.1, dryMass - fuelUsed);
 
+
+    if (parachuteDeployed) {
+        verticalVelocity = Math.max(verticalVelocity - gravity * dt, -7);
+        horizontalVelocity *= Math.max(0, 1 - 2.5 * dt);
+        altitude = Math.max(0, altitude + verticalVelocity * dt);
+        horizontalDistance += horizontalVelocity * dt;
+
+        if (altitude === 0) {
+            verticalVelocity = 0;
+            horizontalVelocity = 0;
+            velocity = 0;
+            running = false;
+        }
+
+        velocity = Math.sqrt(
+            verticalVelocity ** 2 + horizontalVelocity ** 2
+        );
+        simulationTime += dt;
+        updateStarfield(dt);
+        updateDataPanel();
+        drawScene();
+        return;
+    }
 
     // Modelo com empuxo, gravidade e resistência do ar
     const motorForce = powerValueNumber * 2.5;
@@ -525,6 +568,14 @@ function updateSimulation(dt) {
 
     altitude += verticalVelocity * dt;
     horizontalDistance += horizontalVelocity * dt;
+
+    if (altitude >= maxAltitude) {
+        altitude = maxAltitude;
+        parachuteDeployed = true;
+        verticalVelocity = -2;
+        horizontalVelocity *= 0.2;
+    }
+
     velocity = Math.sqrt(
         verticalVelocity ** 2 + horizontalVelocity ** 2
     );
@@ -621,6 +672,7 @@ if (launchButton) {
             cameraX = 0;
             cameraY = 0;
             launchAngle = Number(angle.value);
+            parachuteDeployed = false;
 
 
             running = true;
@@ -659,6 +711,7 @@ if (resetButton) {
             cameraX = 0;
             cameraY = 0;
             launchAngle = Number(angle?.value || 90);
+            parachuteDeployed = false;
 
             lastTime = 0;
 
