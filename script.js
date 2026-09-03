@@ -49,9 +49,9 @@ let spacePlanets = [];
 
 const gravity = 9.81;
 const maxAltitude = 999;
-const burnTime = 4;
-const dragCoefficient = 0.42;
-const referenceArea = 0.8;
+const burnTime = 10;
+const dragCoefficient = 0.08;
+const referenceArea = 0.35;
 const airDensityAtSeaLevel = 1.225;
 
 
@@ -1016,7 +1016,12 @@ function openStudy(type) {
 const studyButtons = {
     fisicaButton: "fisica",
     programacaoButton: "programacao",
-    roboticaButton: "robotica"
+    roboticaButton: "robotica",
+    propulsaoButton: "propulsao",
+    aerodinamicaButton: "aerodinamica",
+    astronomiaButton: "astronomia",
+    matematicaButton: "matematica",
+    engenhariaButton: "engenharia"
 };
 
 
