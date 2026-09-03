@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9A%80%3C/text%3E%3C/svg%3E">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,12 +16,13 @@
 
     <header>
     <nav class="navbar">
-      <div class="logo-container">
+      <a href="#inicio" class="logo" aria-label="RocketLab - início">
         <svg
+            class="rocketlab-logo"
             xmlns="http://www.w3.org/2000/svg"
-            width="150"
-            height="100"
-            viewBox="0 0 150 100"
+            width="250"
+            height="65"
+            viewBox="0 0 300 100"
         >
             <defs>
                 <linearGradient id="rocketBody" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -30,7 +31,7 @@
                 </linearGradient>
             </defs>
 
-            <g transform="translate(75 50) rotate(-12)">
+            <g transform="translate(42 50) scale(.72) rotate(-12)">
                 <path d="M0-38C16-27 20-10 20 12H-20C-20-10-16-27 0-38Z" fill="url(#rocketBody)" />
                 <path d="M-20 5-38 25-18 20Z" fill="#2563eb" />
                 <path d="M20 5 38 25 18 20Z" fill="#2563eb" />
@@ -38,9 +39,11 @@
                 <path d="M-10 12H10L0 34Z" fill="#f97316" />
                 <path d="M-5 14H5L0 27Z" fill="#fde047" />
             </g>
-    </svg>
+            <text x="80" y="55" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="800" fill="url(#rocketBody)">RocketLab</text>
+            <text x="82" y="76" font-family="Arial, Helvetica, sans-serif" font-size="9" letter-spacing="3" fill="#94a3b8">LABORATÓRIO ESPACIAL</text>
+        </svg>
 
-        </div>
+      </a>
 
         <ul>
             <li><a href="#inicio">Início</a></li>
@@ -489,8 +492,6 @@
 </footer>
 
 <script src="script.js"></script>
-
-</body>
 
 </body>
 </html>
