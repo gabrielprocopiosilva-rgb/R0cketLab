@@ -34,6 +34,8 @@ let horizontalVelocity = 0;
 
 let rocketX = 0;
 let rocketY = 0;
+let cameraX = 0;
+let cameraY = 0;
 
 let running = false;
 let lastTime = 0;
@@ -174,7 +176,13 @@ function drawScene() {
         ctx.globalAlpha = star.opacity;
         ctx.fillStyle = "white";
         ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.arc(
+            star.x - cameraX * 0.08,
+            star.y - cameraY * 0.08,
+            star.size,
+            0,
+            Math.PI * 2
+        );
         ctx.fill();
     });
 
@@ -185,15 +193,21 @@ function drawScene() {
         ctx.globalAlpha = Math.min(1, 0.25 + altitude / 500);
         ctx.fillStyle = planet.color;
         ctx.beginPath();
-        ctx.arc(planet.x, planet.y, planet.radius, 0, Math.PI * 2);
+        ctx.arc(
+            planet.x - cameraX * 0.2,
+            planet.y - cameraY * 0.2,
+            planet.radius,
+            0,
+            Math.PI * 2
+        );
         ctx.fill();
 
         ctx.strokeStyle = planet.ring;
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.ellipse(
-            planet.x,
-            planet.y,
+            planet.x - cameraX * 0.2,
+            planet.y - cameraY * 0.2,
             planet.radius * 1.45,
             planet.radius * 0.35,
             -0.2,
@@ -223,22 +237,23 @@ function drawScene() {
 
 
     // O chão desaparece conforme o foguete ganha altitude
+    const groundY = canvas.height - 45 + cameraY;
     const groundOpacity = Math.max(0, 1 - altitude / 180);
     ctx.globalAlpha = groundOpacity;
     ctx.fillStyle = "#14532d";
 
     ctx.fillRect(
         0,
-        canvas.height - 45,
+        groundY,
         canvas.width,
         45
     );
 
     ctx.fillStyle = "#22c55e";
-    ctx.fillRect(0, canvas.height - 45, canvas.width, 4);
+    ctx.fillRect(0, groundY, canvas.width, 4);
 
     ctx.fillStyle = "#94a3b8";
-    ctx.fillRect(canvas.width / 2 - 34, canvas.height - 51, 68, 6);
+    ctx.fillRect(canvas.width / 2 - 34, groundY - 6, 68, 6);
     ctx.globalAlpha = 1;
 
 
@@ -256,14 +271,15 @@ function drawScene() {
 function updateRocketPosition() {
     if (!canvas) return;
 
-    const groundLevel = canvas.height - 45;
     const altitudeScale = Math.max(1, canvas.height * 0.004);
 
-    rocketX = canvas.width / 2 + horizontalDistance * altitudeScale;
-    rocketY = groundLevel - altitude * altitudeScale;
-
-    if (rocketX < 25) rocketX = canvas.width - 25;
-    if (rocketX > canvas.width - 25) rocketX = 25;
+    // A câmera acompanha o foguete, mantendo-o visível durante o voo.
+    cameraX = horizontalDistance * altitudeScale * 0.45;
+    cameraY = altitude * altitudeScale;
+    rocketX = canvas.width / 2 + horizontalDistance * altitudeScale - cameraX;
+    rocketY = altitude > 0
+        ? canvas.height * 0.58
+        : canvas.height - 95;
 }
 
 function drawRocket() {
@@ -522,6 +538,8 @@ if (launchButton) {
             horizontalDistance = 0;
             verticalVelocity = 0;
             horizontalVelocity = 0;
+            cameraX = 0;
+            cameraY = 0;
 
 
             running = true;
@@ -557,6 +575,8 @@ if (resetButton) {
             horizontalDistance = 0;
             verticalVelocity = 0;
             horizontalVelocity = 0;
+            cameraX = 0;
+            cameraY = 0;
 
             lastTime = 0;
 
