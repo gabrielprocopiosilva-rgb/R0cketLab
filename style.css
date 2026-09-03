@@ -58,7 +58,8 @@ header {
 .logo {
     display: flex;
     align-items: center;
-    width: 250px;
+    gap: 10px;
+    width: auto;
     height: 65px;
     text-decoration: none;
     cursor: pointer;
@@ -66,10 +67,17 @@ header {
 
 .rocketlab-logo {
     display: block;
-    width: 250px;
-    height: auto;
+    width: 58px;
+    height: 58px;
     overflow: visible;
     transition: .3s ease;
+}
+
+.logo-title {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: .3px;
 }
 
 .logo:hover .rocketlab-logo {
