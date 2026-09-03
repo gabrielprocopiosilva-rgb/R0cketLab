@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RocketLab | Física, Programação e Robótica</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Fundo de estrelas -->
+    <div class="stars"></div>
+
+    <!-- MENU -->
+    <header>
+        <nav class="navbar">
+
+            <div class="logo">
+                🚀 <span>Rocket</span>Lab
+            </div>
+
+            <ul>
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#fisica">Física</a></li>
+                <li><a href="#programacao">Programação</a></li>
+                <li><a href="#robotica">Robótica</a></li>
+                <li><a href="#simulador">Simulador</a></li>
+            </ul>
+
+        </nav>
+    </header>
+
+
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+
+        <div class="hero-text">
+
+            <p class="tag">🚀 LABORATÓRIO ESPACIAL</p>
+
+            <h1>
+                Explore o universo
+                <span>através da tecnologia</span>
+            </h1>
+
+            <p>
+                Descubra como a Física, a Programação e a Robótica
+                trabalham juntas para transformar uma ideia em um
+                foguete capaz de conquistar o céu.
+            </p>
+
+            <div class="buttons">
+
+                <a href="#simulador" class="btn primary">
+                    🚀 Iniciar simulação
+                </a>
+
+                <a href="#fisica" class="btn secondary">
+                    Explorar conteúdo
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="rocket-container">
+
+            <div class="glow"></div>
+
+            <div class="rocket">
+                🚀
+            </div>
+
+            <div class="smoke"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SOBRE -->
+    <section class="intro">
+
+        <div>
+            <p class="tag">TECNOLOGIA + CIÊNCIA</p>
+
+            <h2>
+                Como um foguete
+                consegue voar?
+            </h2>
+        </div>
+
+        <p>
+            O lançamento de um foguete envolve diversos conceitos
+            científicos e tecnológicos. A força dos motores gera
+            empuxo, enquanto as leis de Newton ajudam a explicar
+            o movimento.
+        </p>
+
+    </section>
+
+
+    <!-- CARDS -->
+    <section class="subjects">
+
+        <div id="fisica" class="subject-card">
+
+            <div class="icon">⚛️</div>
+
+            <h3>Física</h3>
+
+            <p>
+                Estude força, aceleração, velocidade, gravidade,
+                energia e as leis de Newton aplicadas aos foguetes.
+            </p>
+
+            <div class="formula">
+                F = m · a
+            </div>
+
+        </div>
+
+
+        <div id="programacao" class="subject-card">
+
+            <div class="icon">💻</div>
+
+            <h3>Programação</h3>
+
+            <p>
+                Utilize algoritmos e JavaScript para criar
+                simulações e controlar sistemas.
+            </p>
+
+            <div class="formula">
+                if (launch) 🚀
+            </div>
+
+        </div>
+
+
+        <div id="robotica" class="subject-card">
+
+            <div class="icon">🤖</div>
+
+            <h3>Robótica</h3>
+
+            <p>
+                Sensores, motores e microcontroladores podem
+                transformar conceitos digitais em sistemas físicos.
+            </p>
+
+            <div class="formula">
+                Sensor → Arduino → Motor
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SIMULADOR -->
+    <section id="simulador" class="simulation-section">
+
+        <div class="section-title">
+
+            <p class="tag">LABORATÓRIO VIRTUAL</p>
+
+            <h2>Simulador de lançamento</h2>
+
+            <p>
+                Configure os parâmetros e observe o foguete
+                durante o lançamento.
+            </p>
+
+        </div>
+
+
+        <div class="simulator">
+
+            <!-- PAINEL -->
+            <div class="controls">
+
+                <h3>🎛️ Parâmetros</h3>
+
+                <label>
+                    Potência do motor
+                    <span id="powerValue">70%</span>
+                </label>
+
+                <input
+                    type="range"
+                    id="power"
+                    min="20"
+                    max="100"
+                    value="70"
+                >
+
+
+                <label>
+                    Massa do foguete
+                    <span id="massValue">50 kg</span>
+                </label>
+
+                <input
+                    type="range"
+                    id="mass"
+                    min="10"
+                    max="100"
+                    value="50"
+                >
+
+
+                <label>
+                    Ângulo
+                    <span id="angleValue">90°</span>
+                </label>
+
+                <input
+                    type="range"
+                    id="angle"
+                    min="45"
+                    max="90"
+                    value="90"
+                >
+
+
+                <button id="launchButton" class="launch">
+                    🚀 LANÇAR FOGUETE
+                </button>
+
+                <button id="resetButton" class="reset">
+                    ↻ Reiniciar
+                </button>
+
+            </div>
+
+
+            <!-- ÁREA DE SIMULAÇÃO -->
+            <div class="simulation">
+
+                <canvas id="rocketCanvas"></canvas>
+
+                <div class="data-panel">
+
+                    <div>
+                        <small>ALTITUDE</small>
+                        <strong>
+                            <span id="altitude">0</span> m
+                        </strong>
+                    </div>
+
+                    <div>
+                        <small>VELOCIDADE</small>
+                        <strong>
+                            <span id="velocity">0</span> m/s
+                        </strong>
+                    </div>
+
+                    <div>
+                        <small>TEMPO</small>
+                        <strong>
+                            <span id="time">0</span> s
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FÍSICA -->
+    <section class="physics">
+
+        <div class="physics-text">
+
+            <p class="tag">FÍSICA DO LANÇAMENTO</p>
+
+            <h2>
+                A ciência por trás
+                do foguete
+            </h2>
+
+            <p>
+                Para simplificar a simulação, consideramos uma
+                força inicial de propulsão e a ação da gravidade.
+                A aceleração pode ser relacionada pela segunda
+                lei de Newton:
+            </p>
+
+            <div class="big-formula">
+                F = m × a
+            </div>
+
+        </div>
+
+        <div class="physics-cards">
+
+            <div>
+                <span>01</span>
+                <h3>Empuxo</h3>
+                <p>
+                    O motor produz uma força que impulsiona
+                    o foguete para cima.
+                </p>
+            </div>
+
+            <div>
+                <span>02</span>
+                <h3>Gravidade</h3>
+                <p>
+                    A gravidade terrestre atua constantemente
+                    sobre o foguete.
+                </p>
+            </div>
+
+            <div>
+                <span>03</span>
+                <h3>Aceleração</h3>
+                <p>
+                    A relação entre força e massa determina
+                    a aceleração do sistema.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RODAPÉ -->
+    <footer>
+
+        <div class="logo">
+            🚀 RocketLab
+        </div>
+
+        <p>
+            Física • Programação • Robótica
+        </p>
+
+        <p class="copyright">
+            Projeto educacional desenvolvido com HTML,
+            CSS e JavaScript.
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
